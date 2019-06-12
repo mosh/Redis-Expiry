@@ -18,12 +18,6 @@ type
       subscriber.Subscribe(expiredChannel, (channel, value) ->
           begin
             Console.WriteLine($'Expired channel {channel} value {value}');
-            /*
-            if ((string)channel == "__keyspace@0__:users" && (string)value == "sadd")
-            {
-                // Do stuff if some item is added to a hypothethical "users" set in Redis
-            }
-            */
           end);
 
         Console.WriteLine('Any key to exit');
