@@ -8,7 +8,7 @@
     <AssemblyName>RedisExpiryConsoleApplication</AssemblyName>
     <ApplicationIcon>Properties\App.ico</ApplicationIcon>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-    <TargetFramework>.NETFramework4.8</TargetFramework>
+    <TargetFramework>.NETFramework4.6.2</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>False</Optimize>
@@ -39,9 +39,21 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <NuGetReference Include="StackExchange.Redis:[2.0.545]">
+    <NuGetReference Include="StackExchange.Redis:[2.0.601]">
       <Private>True</Private>
     </NuGetReference>
+    <NuGetReference Include="system.buffers:[4.4.0]">
+      <Private>True</Private>
+    </NuGetReference>
+    <NuGetReference Include="System.IO.Pipelines:[4.5.1]">
+      <Private>True</Private>
+    </NuGetReference>
+    <ProjectReference Include="RedisClassLibrary">
+      <HintPath>..\RedisClassLibrary\Bin\Debug\RedisClassLibrary.dll</HintPath>
+      <Project>{D7EB4B62-A0E4-4425-93E1-9E40D3F3CB4C}</Project>
+      <ProjectFile>..\RedisClassLibrary\RedisClassLibrary.elements</ProjectFile>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.pas" />

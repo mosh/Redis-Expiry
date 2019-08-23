@@ -1,29 +1,33 @@
 ﻿namespace RedisExpiryConsoleApplication;
 
 uses
+  RedisClassLibrary,
   StackExchange.Redis;
 
 type
+
+
   Program = class
   public
 
     class method Main(args: array of String): Int32;
     begin
-      var redis := ConnectionMultiplexer.Connect('localhost:6379');
 
-      var subscriber := redis.GetSubscriber;
+      var connectionString := 'localhost:6379';
 
-      var expiredChannel := '__keyevent@0__:expired';
+      var options := ConfigurationOptions.Parse(connectionString);
 
-      subscriber.Subscribe(expiredChannel, (channel, value) ->
-          begin
-            Console.WriteLine($'Expired channel {channel} value {value}');
-          end);
+      var service := new ExpiryService(ConnectionMultiplexerFactory := new ConnectionMultiplexerFactory, options := options);
 
-        Console.WriteLine('Any key to exit');
-        Console.ReadLine;
+      service.Start;
+
+      Console.WriteLine('Any key to exit');
+      Console.ReadLine;
     end;
 
   end;
+
+
+
 
 end.

@@ -12,24 +12,34 @@ type
 
       var db := redis.GetDatabase;
 
-      db.StringSet('myKey','someValue 2',new TimeSpan(0,0,10));
 
-      var value := db.StringGet('myKey');
+      var someKey := $'cache:JOHN10-PC:SessionService:{Guid.NewGuid}';
 
-      if(assigned(value))then
+      DoSomeExpiry(db,'myKey','some value');
+      DoSomeExpiry(db,someKey,'some value 2');
+
+
+
+    end;
+
+    class method DoSomeExpiry(db:IDatabase;key:String; value:String);
+    begin
+      db.StringSet(key,value,new TimeSpan(0,0,10));
+      Console.WriteLine($'set key is {key} value is {value}');
+
+      var setValue := db.StringGet(key);
+
+      if(assigned(setValue))then
       begin
-        Console.WriteLine($'value is {value}');
+        Console.WriteLine($'got value {setValue} for {key}');
       end
       else
       begin
         Console.WriteLine('No value');
       end;
 
-      Console.WriteLine('Press any key to stop...');
-      Console.ReadLine;
-
-
     end;
+
 
   end;
 
