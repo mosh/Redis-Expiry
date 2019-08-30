@@ -17,7 +17,7 @@ type
 
       var options := ConfigurationOptions.Parse(connectionString);
 
-      var service := new ExpiryService(ConnectionMultiplexerFactory := new ConnectionMultiplexerFactory, options := options);
+      var service := new ExpiryService(new ConnectionMultiplexerFactory, options);
 
       service.Start;
 

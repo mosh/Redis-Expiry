@@ -1,32 +1,47 @@
 ﻿namespace RedisClassLibrary;
 
 uses
-  StackExchange.Redis;
+
+  StackExchange.Redis,  System. Collections. Generic;
 
 type
-  ExpiryService = public class
-  public
-    property ConnectionMultiplexerFactory:IConnectionMultiplexerFactory;
-    property options : ConfigurationOptions;
 
+  ExpiryService = public class
+  private
+    _connectionMultiplexerFactory:IConnectionMultiplexerFactory;
+    _options:ConfigurationOptions;
+    _connectionMultiplexors : List<IConnectionMultiplexer> := new List<IConnectionMultiplexer>;
+
+  public
+
+    constructor(connectionMultiplexerFactory:IConnectionMultiplexerFactory; options:ConfigurationOptions);
+    begin
+       _connectionMultiplexerFactory := connectionMultiplexerFactory;
+       _options := options;
+    end;
 
     method Start;
     begin
 
 
-      for each localOptions in ConnectionMultiplexerFactory.MasterEndPoints(options) do
-        begin
+      for each localOptions in _connectionMultiplexerFactory.MasterEndPoints(_options) do
+      begin
 
-        var subscriber := ConnectionMultiplexerFactory.Subscribe(localOptions);
+        var connectionMultiplexor := _connectionMultiplexerFactory.Connect(localOptions);
 
-          var expiredChannel := '__keyspace@0__:cache:JOHN10-PC:SessionService:*';
+        var subscriber := _connectionMultiplexerFactory.Subscribe(connectionMultiplexor);
 
-          subscriber.Subscribe(expiredChannel, (channel, value) ->
-              begin
-                Console.WriteLine($'Expired channel {channel} value {value}');
-              end);
+        var expiredChannel := '__keyspace@0__:cache:JOHN10-PC:SessionService:*';
 
-        end;
+        subscriber.Subscribe(expiredChannel, (channel, value) ->
+            begin
+              Console.WriteLine($'Expired channel {channel} value {value} at {DateTime.Now}');
+            end);
+        _connectionMultiplexors.Add(connectionMultiplexor);
+
+
+
+      end;
 
     end;
 

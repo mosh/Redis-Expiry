@@ -13,14 +13,16 @@ type
 
       var factory := new Mock<IConnectionMultiplexerFactory>(MockBehavior.Strict);
       var subscriber := new Mock<ISubscriber>;
+      var connectionMultiplexor := new Mock<IConnectionMultiplexer>;
 
       var connectionString := 'localhost:6379';
       var options := ConfigurationOptions.Parse(connectionString);
 
-      var service := new ExpiryService(ConnectionMultiplexerFactory := factory.Object, options := options);
+      var service := new ExpiryService(factory.Object, options);
 
       factory.Setup(f -> f.MasterEndPoints(options)).Returns([options]);
-      factory.Setup(f -> f.Subscribe(options)).Returns(subscriber.Object);
+      factory.Setup(f -> f.Connect(options)).Returns(connectionMultiplexor.Object);
+      factory.Setup(f -> f.Subscribe(connectionMultiplexor.Object)).Returns(subscriber.Object);
 
 
       subscriber.Setup(s -> s.Subscribe(

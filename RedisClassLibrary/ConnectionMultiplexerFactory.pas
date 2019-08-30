@@ -12,10 +12,9 @@ type
       exit StackExchange.Redis.ConnectionMultiplexer.Connect(options)
     end;
 
-    method Subscribe(options: ConfigurationOptions): ISubscriber;
+    method Subscribe(connectionMultiplexor: IConnectionMultiplexer): ISubscriber;
     begin
-      var multiplexer := Connect(options);
-      exit multiplexer.GetSubscriber();
+      exit connectionMultiplexor.GetSubscriber();
     end;
 
     method MasterEndPoints(options:ConfigurationOptions): sequence of ConfigurationOptions; iterator;
