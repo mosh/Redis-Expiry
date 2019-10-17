@@ -6,7 +6,7 @@ uses
 
 type
 
-  ExpiryService = public class
+  ExpiryService = public class(IDisposable)
   private
     _connectionMultiplexerFactory:IConnectionMultiplexerFactory;
     _options:ConfigurationOptions;
